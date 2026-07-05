@@ -47,4 +47,3 @@ class prestamo(usuario, libros):
                     return multa
                 else:
                     return 0
-    
