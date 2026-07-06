@@ -1,6 +1,6 @@
 Integrantes del grupo:
                       Zimerman Lautaro Gabriel; 
-                      Tobias Fabien Guillen
+                      Tobias Fabien Guillen; Jesus Alfonso; Balmaceda Francisco
 
 Comision:  
           ISI K1.3
