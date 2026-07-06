@@ -1,5 +1,5 @@
 Integrantes del grupo:
-                      Zimerman Lautaro Gabriel 
+                      Zimerman Lautaro Gabriel; 
                       Tobias Fabien Guillen
 
 Comision:  
