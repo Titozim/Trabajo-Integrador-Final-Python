@@ -139,64 +139,37 @@ class Biblioteca:
         print(f"\n¡Usuario '{nombre_apellido}' registrado con éxito!")
         return nuevo_usuario
 
-def pedir_libro_prestado(nombre_archivo="libros.txt"):
-    print("\n--- Solicitar Préstamo de Libro ---")
-    
-    # 1. Validación del nombre del libro (usando bandera, sin break)
-    nombre_valido = False
-    while not nombre_valido:
-        libro_buscado = input("Ingrese el nombre del libro que desea pedir prestado: ").strip()
-        if libro_buscado != "":
-            nombre_valido = True
-        else:
-            print("Error: El nombre del libro no puede quedar vacío.")    
-    
-    # Variables de estado para controlar qué pasó durante la búsqueda
-    libro_encontrado = False
-    prestamo_exitoso = False
-    lineas_actualizadas = []
-    
-    try:
-        # 2. Leemos todo el archivo de texto y lo guardamos en memoria
-        with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
-            lineas = archivo.readlines()
-    
-    # 3. Recorremos línea por línea buscando el libro
-        for linea in lineas:
-            datos = linea.strip().split('|')
-            
-            # Verifico que la línea tenga el formato correcto (4 datos)
-            if len(datos) == 4:
-                nombre_libro = datos[0]
-                nombre_autor = datos[1]
-                cant_copias = int(datos[2])
-                disponibilidad = datos[3].strip() == 'True'
+ #--- aca realizo el pedido de prestamo de libro--- 
 
-                # Comparo ignorando mayúsculas/minúsculas usando .lower()
-                if nombre_libro.lower() == libro_buscado.lower():
-                    libro_encontrado = True
-                    
-                    # Verifico si hay stock
-                    if cant_copias > 0 and disponibilidad:
-                        cant_copias -= 1  # Descontamos 1
-                        prestamo_exitoso = True
-                        print(f"\n¡Éxito! Se ha registrado el préstamo de '{nombre_libro}'.")
-                        
-                        # Si la cantidad llega a 0, cambiamos la disponibilidad
-                        if cant_copias == 0:
-                            disponibilidad = False
-                            print("Aviso: Se entregó la última copia. El libro ya no está disponible.")
-                    else:
-                        print(f"\nLo sentimos, actualmente no hay copias disponibles de '{nombre_libro}'.")
-                        
-                # Armo la línea de nuevo para guardarla (esté modificada o no)
-                linea_nueva = f"{nombre_libro}|{nombre_autor}|{cant_copias}|{disponibilidad}\n"
-                lineas_actualizadas.append(linea_nueva)
-            else:
-                # Si había una línea rota/vacía en el txt, la dejamos como estaba
-                lineas_actualizadas.append(linea)
-                
-        # 4. Si el préstamo se hizo, sobreescribimos el txt con los nuevos datos
-        if prestamo_exitoso:
-            with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
-                archivo.writelines(lineas_actualizadas)
+    def prestar_libro(self, dni, nombre_libro, dias_prestamo=7):
+        if dni not in self.usuarios:
+            print("No existe un usuario registrado con ese DNI. Registrelo primero.")
+            return None
+
+        clave = nombre_libro.strip().lower()
+        libro = self.libros.get(clave)
+
+        if libro is None:
+            print(f"No se encontró el libro '{nombre_libro}' en el catálogo.")
+            return None
+
+        if libro.cant_copias <= 0 or not libro.disponibilidad:
+            print(f"Lo sentimos, no hay copias disponibles de '{libro.nombre_libro}'.")
+            return None
+
+        # Descontamos stock
+        libro.cant_copias -= 1
+        if libro.cant_copias == 0:
+            libro.disponibilidad = False
+
+        fecha_prestamo = datetime.now()
+        fecha_vencimiento = fecha_prestamo + timedelta(days=dias_prestamo)
+
+        nuevo_prestamo = prestamo(dni, libro.nombre_libro, fecha_prestamo, fecha_vencimiento)
+        self.prestamos.append(nuevo_prestamo)
+
+        self.guardar_libros()
+
+        print(f"\n¡Éxito! Se registró el préstamo de '{libro.nombre_libro}' "
+              f"para el usuario {dni}. Vence el {fecha_vencimiento.strftime('%d/%m/%Y')}.")
+        return nuevo_prestamo
