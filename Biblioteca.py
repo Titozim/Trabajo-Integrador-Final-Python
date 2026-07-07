@@ -115,3 +115,10 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
             nombre_valido = True
         else:
             print("Error: El nombre del libro no puede quedar vacío.")    
+    
+    # Variables de estado para controlar qué pasó durante la búsqueda
+    libro_encontrado = False
+    prestamo_exitoso = False
+    lineas_actualizadas = []
+    
+    
