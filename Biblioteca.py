@@ -129,4 +129,11 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
     # 3. Recorremos línea por línea buscando el libro
         for linea in lineas:
             datos = linea.strip().split('|')
+            
+            # Verificamos que la línea tenga el formato correcto (4 datos)
+            if len(datos) == 4:
+                nombre_libro = datos[0]
+                nombre_autor = datos[1]
+                cant_copias = int(datos[2])
+                disponibilidad = datos[3].strip() == 'True'
     
