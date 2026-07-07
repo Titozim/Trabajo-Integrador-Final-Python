@@ -24,26 +24,28 @@ class libros:
         self.cant_copias = cant_copias
         self.disponibilidad = disponbibilidad
             
-class prestamo(usuario, libros):
+class prestamo:
     def __init__(self,
                  dni: int,
                  nombre_libro : str,
                  fecha_prestamo : datetime,
                  fecha_vencimiento : datetime,
-                 devuelto: bool):
+                 devuelto: bool,
+                 fecha_devolucion: None):
         self.dni = dni
         self.nombre_libro = nombre_libro
         self.fecha_prestamo = fecha_prestamo
         self.fecha_vencimiento = fecha_vencimiento
         self.devuelto = devuelto
+        self.fecha_devolucion = fecha_devolucion 
         
-        def calcular_multa(self):
-            fecha_actual = datetime.now()
-            
-            if self.devuelto:
-                if fecha_actual > self.fecha_vencimiento:
-                    dias_retraso = (fecha_actual - self.fecha_vencimiento)
-                    multa = dias_retraso * 3500
-                    return multa
-                else:
-                    return 0
+    def calcular_multa(self):
+        if self.devuelto:
+            fecha_referencia = self.fecha_devolucion
+        else:
+            fecha_referencia = datetime.now()
+
+        if fecha_referencia > self.fecha_vencimiento:
+            dias_retraso = (fecha_referencia - self.fecha_vencimiento).days
+            return dias_retraso * 3500
+        return 0
