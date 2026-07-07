@@ -103,3 +103,15 @@ def registrar_usuario():
     print(f"\n¡Usuario '{nombre_apellido}' registrado con éxito!")
     
     return nuevo_usuario
+
+def pedir_libro_prestado(nombre_archivo="libros.txt"):
+    print("\n--- Solicitar Préstamo de Libro ---")
+    
+    # 1. Validación del nombre del libro (usando bandera, sin break)
+    nombre_valido = False
+    while not nombre_valido:
+        libro_buscado = input("Ingrese el nombre del libro que desea pedir prestado: ").strip()
+        if libro_buscado != "":
+            nombre_valido = True
+        else:
+            print("Error: El nombre del libro no puede quedar vacío.")    
