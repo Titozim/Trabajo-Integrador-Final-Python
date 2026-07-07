@@ -140,3 +140,9 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
                 # Comparo ignorando mayúsculas/minúsculas usando .lower()
                 if nombre_libro.lower() == libro_buscado.lower():
                     libro_encontrado = True
+                    
+                    # Verifico si hay stock
+                    if cant_copias > 0 and disponibilidad:
+                        cant_copias -= 1  # Descontamos 1
+                        prestamo_exitoso = True
+                        print(f"\n¡Éxito! Se ha registrado el préstamo de '{nombre_libro}'.")
