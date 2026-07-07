@@ -153,3 +153,10 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
                             print("Aviso: Se entregó la última copia. El libro ya no está disponible.")
                     else:
                         print(f"\nLo sentimos, actualmente no hay copias disponibles de '{nombre_libro}'.")
+                        
+                # Armo la línea de nuevo para guardarla (esté modificada o no)
+                linea_nueva = f"{nombre_libro}|{nombre_autor}|{cant_copias}|{disponibilidad}\n"
+                lineas_actualizadas.append(linea_nueva)
+            else:
+                # Si había una línea rota/vacía en el txt, la dejamos como estaba
+                lineas_actualizadas.append(linea)
