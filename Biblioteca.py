@@ -121,4 +121,9 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
     prestamo_exitoso = False
     lineas_actualizadas = []
     
+    try:
+        # 2. Leemos todo el archivo de texto y lo guardamos en memoria
+        with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+            lineas = archivo.readlines()
+    
     
