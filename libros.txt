@@ -1,40 +1,40 @@
 Don Quijote|Miguel de Cervantes|5|True
-1984|George Orwell|3|False
+1984|George Orwell|3|True
 El Principito|Antoine de Saint-Exupéry|10|True
 Cien Años de Soledad|Gabriel García Márquez|4|True
-El Código Da Vinci|Dan Brown|2|False
+El Código Da Vinci|Dan Brown|2|True
 Harry Potter y la Piedra Filosofal|J.K. Rowling|8|True
 El Señor de los Anillos|J.R.R. Tolkien|6|True
 La Revolución Francesa|Simon Schama|2|True
-Orgullo y Prejuicio|Jane Austen|7|False
+Orgullo y Prejuicio|Jane Austen|7|True
 El Quijote de la Mancha|Miguel de Cervantes|3|True
 Crimen y Castigo|Fiódor Dostoyevski|4|True
-El Hobbit|J.R.R. Tolkien|5|False
+El Hobbit|J.R.R. Tolkien|5|True
 La Metamorfosis|Franz Kafka|9|True
 Moby Dick|Herman Melville|2|True
 Jane Eyre|Charlotte Brontë|6|True
-Los Miserables|Víctor Hugo|3|False
+Los Miserables|Víctor Hugo|3|True
 Anna Karenina|Lev Tolstói|2|True
 El Retrato de Dorian Gray|Oscar Wilde|8|True
-Wuthering Heights|Emily Brontë|4|False
+Wuthering Heights|Emily Brontë|4|True
 El Extranjero|Albert Camus|5|True
 La Peste|Albert Camus|3|True
-El Proceso|Franz Kafka|2|False
+El Proceso|Franz Kafka|2|True
 La Conjura de los Necios|John Kennedy Toole|6|True
 Fahrenheit 451|Ray Bradbury|7|True
 Brave New World|Aldous Huxley|4|True
-El Viejo y el Mar|Ernest Hemingway|9|False
+El Viejo y el Mar|Ernest Hemingway|9|True
 Las Aventuras de Sherlock Holmes|Arthur Conan Doyle|5|True
 Drácula|Bram Stoker|3|True
-Frankenstein|Mary Shelley|6|False
+Frankenstein|Mary Shelley|6|True
 El Príncipe|Nicolás Maquiavelo|2|True
 Sapiens|Yuval Noah Harari|8|True
 El Poder del Hábito|Charles Duhigg|4|True
-Educación en la Tecnología|Seymour Papert|1|False
+Educación en la Tecnología|Seymour Papert|1|True
 Python para Principiantes|Mark Lutz|7|True
 Estructura de Datos|Linus Torvalds|3|True
-La Mente Humana|David Eagleman|5|False
+La Mente Humana|David Eagleman|5|True
 La Historia de la Humanidad|Will Durant|2|True
 Filosofía 101|Paul Strathern|6|True
 Astrofísica para Gente de Prisa|Neil deGrasse Tyson|4|True
-El Universo en una Cáscara de Nuez|Stephen Hawking|3|False
+El Universo en una Cáscara de Nuez|Stephen Hawking|3|True
