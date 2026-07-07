@@ -126,4 +126,7 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
         with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
             lineas = archivo.readlines()
     
+    # 3. Recorremos línea por línea buscando el libro
+        for linea in lineas:
+            datos = linea.strip().split('|')
     
