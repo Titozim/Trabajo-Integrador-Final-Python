@@ -49,3 +49,20 @@ class prestamo:
             dias_retraso = (fecha_referencia - self.fecha_vencimiento).days
             return dias_retraso * 3500
         return 0
+    
+def registrar_usuario():
+    print("\n--- Registro de Nuevo Usuario ---")
+    
+    # 1. Validación del DNI con bandera
+    dni_valido = False
+    while not dni_valido:
+        try:
+            dni = int(input("Ingrese DNI (sin puntos ni espacios): "))
+            if dni > 0:
+                dni_valido = True  # La bandera cambia, el bucle termina
+            else:
+                print("Error: El DNI debe ser mayor a cero.")
+        except ValueError:
+            print("Error: Ingrese únicamente números para el DNI.")
+
+    
