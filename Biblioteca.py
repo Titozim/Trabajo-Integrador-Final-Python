@@ -98,4 +98,8 @@ def registrar_usuario():
         else:
             print("Error: La dirección no puede quedar vacía.")
 
+    # Creación del objeto usuario
+    nuevo_usuario = usuario(dni, nombre_apellido, celular, fecha_registro, direccion)
+    print(f"\n¡Usuario '{nombre_apellido}' registrado con éxito!")
     
+    return nuevo_usuario
