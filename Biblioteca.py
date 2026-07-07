@@ -86,5 +86,7 @@ def registrar_usuario():
         except ValueError:
             print("Error: Ingrese únicamente números para el celular.")
 
-    
+    # Fecha de registro automática
+    fecha_registro = datetime.now()
+
     
