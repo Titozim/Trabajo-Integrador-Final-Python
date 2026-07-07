@@ -89,4 +89,13 @@ def registrar_usuario():
     # Fecha de registro automática
     fecha_registro = datetime.now()
 
+    # 4. Validación de Dirección con bandera
+    direccion_valida = False
+    while not direccion_valida:
+        direccion = input("Ingrese Dirección: ").strip()
+        if direccion != "":
+            direccion_valida = True
+        else:
+            print("Error: La dirección no puede quedar vacía.")
+
     
