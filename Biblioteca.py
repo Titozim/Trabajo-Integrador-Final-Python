@@ -65,4 +65,26 @@ def registrar_usuario():
         except ValueError:
             print("Error: Ingrese únicamente números para el DNI.")
 
+    # 2. Validación de Nombre y Apellido con bandera
+    nombre_valido = False
+    while not nombre_valido:
+        nombre_apellido = input("Ingrese Nombre y Apellido: ").strip()
+        if nombre_apellido != "":
+            nombre_valido = True
+        else:
+            print("Error: Este campo no puede quedar vacío.")
+
+    # 3. Validación del Celular con bandera
+    celular_valido = False
+    while not celular_valido:
+        try:
+            celular = int(input("Ingrese número de celular: "))
+            if celular > 0:
+                celular_valido = True
+            else:
+                print("Error: El celular debe ser un número válido.")
+        except ValueError:
+            print("Error: Ingrese únicamente números para el celular.")
+
+    
     
