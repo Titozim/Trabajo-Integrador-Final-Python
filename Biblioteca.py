@@ -146,3 +146,10 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
                         cant_copias -= 1  # Descontamos 1
                         prestamo_exitoso = True
                         print(f"\n¡Éxito! Se ha registrado el préstamo de '{nombre_libro}'.")
+                        
+                        # Si la cantidad llega a 0, cambiamos la disponibilidad
+                        if cant_copias == 0:
+                            disponibilidad = False
+                            print("Aviso: Se entregó la última copia. El libro ya no está disponible.")
+                    else:
+                        print(f"\nLo sentimos, actualmente no hay copias disponibles de '{nombre_libro}'.")
