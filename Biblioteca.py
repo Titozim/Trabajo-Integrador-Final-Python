@@ -23,7 +23,7 @@ class libros:
         self.nombre_autor = nombre_autor
         self.cant_copias = cant_copias
         self.disponibilidad = disponbibilidad
-        
+            
 class prestamo:
     def __init__(self,
                  dni: int,
@@ -43,39 +43,39 @@ class prestamo:
         if self.devuelto:
             fecha_referencia = self.fecha_devolucion
         else:
-            fecha_referencia = datetime.now() #le doy mi fecha actual 
+            fecha_referencia = datetime.now()
 
-        if fecha_referencia > self.fecha_vencimiento: #condicion de si se paso de la fecha
+        if fecha_referencia > self.fecha_vencimiento:
             dias_retraso = (fecha_referencia - self.fecha_vencimiento).days
-            return dias_retraso * 3500 #suponemos que por dia paga 3500 pesos
+            return dias_retraso * 3500
         return 0
-        
+
+#creo una clase biblioteca para que almacene todo en conjunto 
 class Biblioteca:
     def __init__(self):
-        self.libros = {}       # nombre_libro va mi Libro
-        self.usuarios = {}     # dni es mi Usuario
-        self.prestamos = []    # lista de Prestamo
-
-    #-------aca estoy definiendo mi funcion de carga de libros------
-
+        self.libros = {}      # nombre_libro (lower) -> Libro
+        self.usuarios = {}    # dni -> Usuario
+        self.prestamos = []   # lista de Prestamo
+        
+        #ahora se realizan la carga de los libros 
     def cargar_libros(self, ruta_txt="libro.txt"):
-            try:
-                with open(ruta_txt, encoding="utf-8") as f:
-                    for linea in f:
-                        linea = linea.strip()
-                        if not linea:
-                            continue
-                        datos = linea.split("|")
-                        if len(datos) != 4:
-                            print(f"Aviso: línea mal formada, se ignora -> {linea}")
-                            continue
-                        nombre, autor, cant, disp = datos
-                        libro = libro(nombre, autor, int(cant), disp.strip() == "True")
-                        self.libros[nombre.lower()] = libro
-                print(f"Se cargaron {len(self.libros)} libros desde '{ruta_txt}'.")
-            except FileNotFoundError:
-                print(f"No se encontró el archivo '{ruta_txt}'.")
-    
+        try:
+            with open(ruta_txt, encoding="utf-8") as f:
+                for linea in f:
+                    linea = linea.strip()
+                    if not linea:
+                        continue
+                    datos = linea.split("|")
+                    if len(datos) != 4:
+                        print(f"línea mal formada, se ignora ... {linea}")
+                        continue
+                    nombre, autor, cant, disp = datos
+                    libro = libro(nombre, autor, int(cant), disp.strip() == "True") #me lo recomendo claude (investigar si se puede hacer asi)
+                    self.libros[nombre.lower()] = libro #la funcion lower me hace todo en minuscula
+            print(f"Se cargaron {len(self.libros)} libros desde '{ruta_txt}'.")
+        except FileNotFoundError:
+            print(f"No se encontró el archivo '{ruta_txt}'.")
+
     def guardar_libros(self, ruta_txt="libro.txt"):
         try:
             with open(ruta_txt, "w", encoding="utf-8") as f:
@@ -84,12 +84,12 @@ class Biblioteca:
                             f"{libro.cant_copias}|{libro.disponibilidad}\n")
         except Exception as e:
             print(f"Ocurrió un error al guardar los libros: {e}")
-    
-    #---aca comienzo con mi registro de los usuarios-----
+            
+    #---ahroa se realiza el registro de usuarios----
     
     def registrar_usuario(self):
-        print("\n--- Registro de Nuevo Usuario ---")
- 
+        print("\n--- Registro de Nuevo Usuario ---") #informo 
+
         dni_valido = False
         while not dni_valido:
             try:
@@ -100,11 +100,11 @@ class Biblioteca:
                     print("Error: El DNI debe ser mayor a cero.")
             except ValueError:
                 print("Error: Ingrese únicamente números para el DNI.")
- 
+
         if dni in self.usuarios:
             print("Ya existe un usuario registrado con ese DNI.")
             return self.usuarios[dni]
- 
+
         nombre_valido = False
         while not nombre_valido:
             nombre_apellido = input("Ingrese Nombre y Apellido: ").strip()
@@ -112,7 +112,7 @@ class Biblioteca:
                 nombre_valido = True
             else:
                 print("Error: Este campo no puede quedar vacío.")
- 
+
         celular_valido = False
         while not celular_valido:
             try:
@@ -123,9 +123,9 @@ class Biblioteca:
                     print("Error: El celular debe ser un número válido.")
             except ValueError:
                 print("Error: Ingrese únicamente números para el celular.")
- 
+
         fecha_registro = datetime.now()
- 
+
         direccion_valida = False
         while not direccion_valida:
             direccion = input("Ingrese Dirección: ").strip()
@@ -133,145 +133,70 @@ class Biblioteca:
                 direccion_valida = True
             else:
                 print("Error: La dirección no puede quedar vacía.")
- 
+
         nuevo_usuario = usuario(dni, nombre_apellido, celular, fecha_registro, direccion)
         self.usuarios[dni] = nuevo_usuario
         print(f"\n¡Usuario '{nombre_apellido}' registrado con éxito!")
         return nuevo_usuario
 
-    #---aca hacemos la solicitud para pedir prestado el libro---
-
-    def prestar_libro(self, dni, nombre_libro, dias_prestamo=7):
-        if dni not in self.usuarios:
-            print("No existe un usuario registrado con ese DNI. Registrelo primero.")
-            return None
- 
-        clave = nombre_libro.strip().lower()
-        libro = self.libros.get(clave)
- 
-        if libro is None:
-            print(f"No se encontró el libro '{nombre_libro}' en el catálogo.")
-            return None
- 
-        if libro.cant_copias <= 0 or not libro.disponibilidad:
-            print(f"Lo sentimos, no hay copias disponibles de '{libro.nombre_libro}'.")
-            return None
- 
-        # Descontamos stock
-        libro.cant_copias -= 1
-        if libro.cant_copias == 0:
-            libro.disponibilidad = False
- 
-        fecha_prestamo = datetime.now()
-        fecha_vencimiento = fecha_prestamo + timedelta(days=dias_prestamo)
- 
-        nuevo_prestamo = prestamo(dni, libro.nombre_libro, fecha_prestamo, fecha_vencimiento)
-        self.prestamos.append(nuevo_prestamo)
- 
-        self.guardar_libros()
- 
-        print(f"\n¡Éxito! Se registró el préstamo de '{libro.nombre_libro}' "
-              f"para el usuario {dni}. Vence el {fecha_vencimiento.strftime('%d/%m/%Y')}.")
-        return nuevo_prestamo
+def pedir_libro_prestado(nombre_archivo="libros.txt"):
+    print("\n--- Solicitar Préstamo de Libro ---")
     
-    #---devolucion de libro---    
-
-def devolver_libro(self, dni, nombre_libro):
-        clave = nombre_libro.strip().lower()
- 
-        prestamo_buscado = None
-        for prestamo in self.prestamos:
-            if (prestamo.dni == dni
-                    and prestamo.nombre_libro.lower() == clave
-                    and not prestamo.devuelto):
-                prestamo_buscado = prestamo
-                break
- 
-        if prestamo_buscado is None:
-            print("No se encontró un préstamo activo con esos datos.")
-            return None
- 
-        prestamo_buscado.devuelto = True
-        prestamo_buscado.fecha_devolucion = datetime.now()
- 
-        libro = self.libros.get(clave)
-        if libro is not None:
-            libro.cant_copias += 1
-            libro.disponibilidad = True
-            self.guardar_libros()
- 
-        multa = prestamo_buscado.calcular_multa()
-        if multa > 0:
-            print(f"\nDevolución registrada. El usuario tiene una multa de ${multa} por demora.")
+    # 1. Validación del nombre del libro (usando bandera, sin break)
+    nombre_valido = False
+    while not nombre_valido:
+        libro_buscado = input("Ingrese el nombre del libro que desea pedir prestado: ").strip()
+        if libro_buscado != "":
+            nombre_valido = True
         else:
-            print("\nDevolución registrada. Sin multas.")
- 
-        return prestamo_buscado
+            print("Error: El nombre del libro no puede quedar vacío.")    
     
-    #--- aca hago la estadisticas adicionales---
+    # Variables de estado para controlar qué pasó durante la búsqueda
+    libro_encontrado = False
+    prestamo_exitoso = False
+    lineas_actualizadas = []
     
-def libro_mas_solicitado(self):
-    if not self.prestamos:
-        print("Todavía no se registraron préstamos.")
-        return None
- 
-    conteo = {}
-    for prestamo in self.prestamos:
-        conteo[prestamo.nombre_libro] = conteo.get(prestamo.nombre_libro, 0) + 1
- 
-    libro_top = max(conteo, key=conteo.get)
-    print(f"El libro más solicitado es '{libro_top}' con {conteo[libro_top]} préstamo(s).")
-    return libro_top, conteo[libro_top]
- 
-def cantidad_prestamos_realizados(self):
-    total = len(self.prestamos)
-    print(f"Cantidad total de préstamos realizados: {total}")
-    return total
+    try:
+        # 2. Leemos todo el archivo de texto y lo guardamos en memoria
+        with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+            lineas = archivo.readlines()
     
-    #--- creo el menu para realizar las acciones---
-    
-def menu():
-    biblioteca = Biblioteca()
-    biblioteca.cargar_libros("libro.txt")
- 
-    opciones = {
-        "1": "Registrar usuario",
-        "2": "Pedir libro prestado",
-        "3": "Devolver libro",
-        "4": "Ver libro más solicitado",
-        "5": "Ver cantidad de préstamos realizados",
-        "6": "Salir",
-    }
- 
-    while True:
-        print("\n--- Sistema de Biblioteca ---")
-        for clave, texto in opciones.items():
-            print(f"{clave}. {texto}")
- 
-        opcion = input("Elija una opción: ").strip()
- 
-        if opcion == "1":
-            biblioteca.registrar_usuario()
-        elif opcion == "2":
-            dni = int(input("Ingrese su DNI: "))
-            nombre_libro = input("Ingrese el nombre del libro: ")
-            biblioteca.prestar_libro(dni, nombre_libro)
-        elif opcion == "3":
-            dni = int(input("Ingrese su DNI: "))
-            nombre_libro = input("Ingrese el nombre del libro a devolver: ")
-            biblioteca.devolver_libro(dni, nombre_libro)
-        elif opcion == "4":
-            biblioteca.libro_mas_solicitado()
-        elif opcion == "5":
-            biblioteca.cantidad_prestamos_realizados()
-        elif opcion == "6":
-            print("¡Hasta luego!")
-            break
-        else:
-            print("Opción inválida, intente de nuevo.")
- 
- 
-if __name__ == "__main__":
-    menu()
-    
-    
+    # 3. Recorremos línea por línea buscando el libro
+        for linea in lineas:
+            datos = linea.strip().split('|')
+            
+            # Verifico que la línea tenga el formato correcto (4 datos)
+            if len(datos) == 4:
+                nombre_libro = datos[0]
+                nombre_autor = datos[1]
+                cant_copias = int(datos[2])
+                disponibilidad = datos[3].strip() == 'True'
+
+                # Comparo ignorando mayúsculas/minúsculas usando .lower()
+                if nombre_libro.lower() == libro_buscado.lower():
+                    libro_encontrado = True
+                    
+                    # Verifico si hay stock
+                    if cant_copias > 0 and disponibilidad:
+                        cant_copias -= 1  # Descontamos 1
+                        prestamo_exitoso = True
+                        print(f"\n¡Éxito! Se ha registrado el préstamo de '{nombre_libro}'.")
+                        
+                        # Si la cantidad llega a 0, cambiamos la disponibilidad
+                        if cant_copias == 0:
+                            disponibilidad = False
+                            print("Aviso: Se entregó la última copia. El libro ya no está disponible.")
+                    else:
+                        print(f"\nLo sentimos, actualmente no hay copias disponibles de '{nombre_libro}'.")
+                        
+                # Armo la línea de nuevo para guardarla (esté modificada o no)
+                linea_nueva = f"{nombre_libro}|{nombre_autor}|{cant_copias}|{disponibilidad}\n"
+                lineas_actualizadas.append(linea_nueva)
+            else:
+                # Si había una línea rota/vacía en el txt, la dejamos como estaba
+                lineas_actualizadas.append(linea)
+                
+        # 4. Si el préstamo se hizo, sobreescribimos el txt con los nuevos datos
+        if prestamo_exitoso:
+            with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+                archivo.writelines(lineas_actualizadas)
