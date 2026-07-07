@@ -160,3 +160,8 @@ def pedir_libro_prestado(nombre_archivo="libros.txt"):
             else:
                 # Si había una línea rota/vacía en el txt, la dejamos como estaba
                 lineas_actualizadas.append(linea)
+                
+        # 4. Si el préstamo se hizo, sobreescribimos el txt con los nuevos datos
+        if prestamo_exitoso:
+            with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+                archivo.writelines(lineas_actualizadas)
