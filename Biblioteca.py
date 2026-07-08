@@ -99,10 +99,14 @@ class Biblioteca:
         while not dni_valido:
             try:
                 dni = int(input("Ingrese DNI (sin puntos ni espacios): "))
-                if dni > 0:
-                    dni_valido = True
-                else:
+                if dni <= 0:
                     print("Error: El DNI debe ser mayor a cero.")
+                elif len(str(dni)) < 8:
+                    print("Error: El DNI no puede tener menos de 8 números.")
+                elif len(str(dni)) > 8:
+                    print("Error: El DNI no puede tener más de 8 números.")
+                else:
+                    dni_valido = True
             except ValueError:
                 print("Error: Ingrese únicamente números para el DNI.")
 
@@ -122,10 +126,12 @@ class Biblioteca:
         while not celular_valido:
             try:
                 celular = int(input("Ingrese número de celular: "))
-                if celular > 0:
-                    celular_valido = True
-                else:
+                if celular <= 0:
                     print("Error: El celular debe ser un número válido.")
+                elif len(str(celular)) > 10:
+                    print("Error: El celular no puede tener más de 10 números.")
+                else:
+                    celular_valido = True
             except ValueError:
                 print("Error: Ingrese únicamente números para el celular.")
 
@@ -221,6 +227,23 @@ class Biblioteca:
 
         return prestamo_buscado
 
+    def devolver_todos(self, dni):
+        activos = [p for p in self.prestamos if p.dni == dni and not p.devuelto]
+
+        if not activos:
+            print("Este usuario no tiene préstamos activos para devolver.")
+            return []
+
+        print(f"\nSe encontraron {len(activos)} préstamo(s) activo(s). Devolviendo todos...")
+        devueltos = []
+        for prestamo in activos:
+            resultado = self.devolver_libro(dni, prestamo.nombre_libro)
+            if resultado is not None:
+                devueltos.append(resultado)
+
+        print(f"\nSe devolvieron {len(devueltos)} libro(s) en total.")
+        return devueltos
+
     # ---------- SIMULACIÓN DE ATRASO (SOLO PARA PRUEBAS) ----------
     def simular_atraso(self, dni, nombre_libro, dias_atraso):
         clave = nombre_libro.strip().lower()
@@ -241,6 +264,8 @@ class Biblioteca:
         print(f"\nSe adelantó el vencimiento {dias_atraso} día(s) para poder probar el cálculo de multas.")
         print(f"Nueva fecha de vencimiento: {prestamo_buscado.fecha_vencimiento.strftime('%d/%m/%Y')}")
         return prestamo_buscado
+
+    # ---------- ESTADÍSTICAS ----------
     def libro_mas_solicitado(self):
         if not self.prestamos:
             print("Todavía no se registraron préstamos.")
@@ -250,7 +275,17 @@ class Biblioteca:
         for prestamo in self.prestamos:
             conteo[prestamo.nombre_libro] = conteo.get(prestamo.nombre_libro, 0) + 1
 
-        libro_top = max(conteo, key=conteo.get)
+        maximo = max(conteo.values())
+        libros_top = [nombre for nombre, cant in conteo.items() if cant == maximo]
+
+        if len(libros_top) > 1:
+            print(f"No hay un libro más solicitado que otro: hay un empate entre "
+                  f"{len(libros_top)} libros con {maximo} préstamo(s) cada uno:")
+            for nombre in sorted(libros_top, key=str.lower):
+                print(f"- {nombre}")
+            return libros_top, maximo
+
+        libro_top = libros_top[0]
         print(f"El libro más solicitado es '{libro_top}' con {conteo[libro_top]} préstamo(s).")
         return libro_top, conteo[libro_top]
 
@@ -289,12 +324,22 @@ def menu():
             biblioteca.mostrar_catalogo()
         elif opcion == "3":
             dni = int(input("Ingrese su DNI: "))
-            nombre_libro = input("Ingrese el nombre del libro: ")
-            biblioteca.prestar_libro(dni, nombre_libro)
+            while True:
+                nombre_libro = input("Ingrese el nombre del libro (o 'listo' para terminar): ").strip()
+                if nombre_libro.lower() in ("listo", "salir", ""):
+                    break
+                biblioteca.prestar_libro(dni, nombre_libro)
         elif opcion == "4":
             dni = int(input("Ingrese su DNI: "))
-            nombre_libro = input("Ingrese el nombre del libro a devolver: ")
-            biblioteca.devolver_libro(dni, nombre_libro)
+            respuesta = input("¿Querés devolver todos tus libros prestados de una vez? (s/n): ").strip().lower()
+            if respuesta == "s":
+                biblioteca.devolver_todos(dni)
+            else:
+                while True:
+                    nombre_libro = input("Ingrese el nombre del libro a devolver (o 'listo' para terminar): ").strip()
+                    if nombre_libro.lower() in ("listo", "salir", ""):
+                        break
+                    biblioteca.devolver_libro(dni, nombre_libro)
         elif opcion == "5":
             biblioteca.libro_mas_solicitado()
         elif opcion == "6":

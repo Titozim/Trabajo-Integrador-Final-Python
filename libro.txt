@@ -1,4 +1,4 @@
-Don Quijote|Miguel de Cervantes|5|True
+Don Quijote|Miguel de Cervantes|4|True
 1984|George Orwell|2|True
 El Principito|Antoine de Saint-Exupéry|10|True
 Cien Años de Soledad|Gabriel García Márquez|4|True
@@ -13,12 +13,12 @@ El Hobbit|J.R.R. Tolkien|5|True
 La Metamorfosis|Franz Kafka|9|True
 Moby Dick|Herman Melville|2|True
 Jane Eyre|Charlotte Brontë|6|True
-Los Miserables|Víctor Hugo|3|True
+Los Miserables|Víctor Hugo|2|True
 Anna Karenina|Lev Tolstói|2|True
 El Retrato de Dorian Gray|Oscar Wilde|8|True
-Wuthering Heights|Emily Brontë|4|True
+Wuthering Heights|Emily Brontë|3|True
 El Extranjero|Albert Camus|5|True
-La Peste|Albert Camus|3|True
+La Peste|Albert Camus|2|True
 El Proceso|Franz Kafka|2|True
 La Conjura de los Necios|John Kennedy Toole|6|True
 Fahrenheit 451|Ray Bradbury|7|True
@@ -28,7 +28,7 @@ Las Aventuras de Sherlock Holmes|Arthur Conan Doyle|5|True
 Drácula|Bram Stoker|3|True
 Frankenstein|Mary Shelley|6|True
 El Príncipe|Nicolás Maquiavelo|2|True
-Sapiens|Yuval Noah Harari|8|True
+Sapiens|Yuval Noah Harari|6|True
 El Poder del Hábito|Charles Duhigg|4|True
 Educación en la Tecnología|Seymour Papert|1|True
 Python para Principiantes|Mark Lutz|7|True
