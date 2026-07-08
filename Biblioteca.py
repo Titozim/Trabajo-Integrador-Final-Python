@@ -139,7 +139,23 @@ class Biblioteca:
         print(f"\n¡Usuario '{nombre_apellido}' registrado con éxito!")
         return nuevo_usuario
 
- #--- aca realizo el pedido de prestamo de libro--- 
+    #-- funcion para mostrar los libros que tengo---
+    
+    def mostrar_libros_disponibles(self):
+        disponibles = [libro for libro in self.libros.values()
+                       if libro.disponibilidad and libro.cant_copias > 0]
+ 
+        if not disponibles:
+            print("\nNo hay libros disponibles en este momento.")
+            return disponibles
+ 
+        print("\n--- Libros Disponibles ---")
+        for libro in sorted(disponibles, key=lambda l: l.nombre_libro.lower()):
+            print(f"- {libro.nombre_libro} | {libro.nombre_autor} | "
+                  f"{libro.cant_copias} copia(s) disponible(s)")
+        return disponibles
+    
+     #--- aca realizo el pedido de prestamo de libro--- 
 
     def prestar_libro(self, dni, nombre_libro, dias_prestamo=7):
         if dni not in self.usuarios:
@@ -225,3 +241,52 @@ class Biblioteca:
         total = len(self.prestamos)
         print(f"Cantidad total de préstamos realizados: {total}")
         return total
+    
+# creo un menu para poder realizar las acciones
+
+def menu():
+    biblioteca = Biblioteca()
+    biblioteca.cargar_libros("libro.txt")
+ 
+    opciones = {
+        "1": "Registrar usuario",
+        "2": "Ver libros disponibles",
+        "3": "Pedir libro prestado",
+        "4": "Devolver libro",
+        "5": "Ver libro más solicitado",
+        "6": "Ver cantidad de préstamos realizados",
+        "7": "Salir",
+    }
+ 
+    while True:
+        print("\n--- Sistema de Biblioteca ---")
+        for clave, texto in opciones.items():
+            print(f"{clave}. {texto}")
+ 
+        opcion = input("Elija una opción: ").strip()
+ 
+        if opcion == "1":
+            biblioteca.registrar_usuario()
+        elif opcion == "2":
+            biblioteca.mostrar_libros_disponibles()
+        elif opcion == "3":
+            dni = int(input("Ingrese su DNI: "))
+            nombre_libro = input("Ingrese el nombre del libro: ")
+            biblioteca.prestar_libro(dni, nombre_libro)
+        elif opcion == "4":
+            dni = int(input("Ingrese su DNI: "))
+            nombre_libro = input("Ingrese el nombre del libro a devolver: ")
+            biblioteca.devolver_libro(dni, nombre_libro)
+        elif opcion == "5":
+            biblioteca.libro_mas_solicitado()
+        elif opcion == "6":
+            biblioteca.cantidad_prestamos_realizados()
+        elif opcion == "7":
+            print("¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida, intente de nuevo.")
+ 
+ 
+if __name__ == "__main__":
+    menu()
