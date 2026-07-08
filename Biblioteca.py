@@ -170,6 +170,58 @@ class Biblioteca:
 
         self.guardar_libros()
 
-        print(f"\n¡Éxito! Se registró el préstamo de '{libro.nombre_libro}' "
-              f"para el usuario {dni}. Vence el {fecha_vencimiento.strftime('%d/%m/%Y')}.")
+        print(f"\nSe registró el préstamo de '{libro.nombre_libro}' "
+              f"para el usuario {dni}. Vence el {fecha_vencimiento.strftime('%d/%m/%Y')}.") #claude me recomendo que escriba asi la fecha de vencimiento (verificar)
         return nuevo_prestamo
+    
+     # ---funcion para realizar la devolucion de los libros---
+    def devolver_libro(self, dni, nombre_libro):
+        clave = nombre_libro.strip().lower()
+
+        prestamo_buscado = None
+        for prestamo in self.prestamos:
+            if (prestamo.dni == dni
+                    and prestamo.nombre_libro.lower() == clave
+                    and not prestamo.devuelto):
+                prestamo_buscado = prestamo
+                break
+
+        if prestamo_buscado is None:
+            print("No se encontró un préstamo activo con esos datos.")
+            return None
+
+        prestamo_buscado.devuelto = True
+        prestamo_buscado.fecha_devolucion = datetime.now()
+
+        libro = self.libros.get(clave)
+        if libro is not None:
+            libro.cant_copias += 1
+            libro.disponibilidad = True
+            self.guardar_libros()
+
+        multa = prestamo_buscado.calcular_multa()
+        if multa > 0:
+            print(f"\nDevolución registrada. El usuario tiene una multa de ${multa} por demora.")
+        else:
+            print("\nDevolución registrada. Sin multas.")
+
+        return prestamo_buscado
+
+    # --- funcion para ver estadisticas ----
+    def libro_mas_solicitado(self): 
+        if not self.prestamos:
+            print("Todavía no se registraron préstamos.")
+            return None
+
+        conteo = {}
+        for prestamo in self.prestamos: #realizo un contador para contar cual es el nombre del libro que mas de pide 
+            conteo[prestamo.nombre_libro] = conteo.get(prestamo.nombre_libro, 0) + 1
+
+        libro_top = max(conteo, key=conteo.get) #recomendacion de claude para verificar con un valor alto para saber cual es el mayor 
+        print(f"El libro más solicitado es '{libro_top}' con {conteo[libro_top]} préstamo(s).")
+        return libro_top, conteo[libro_top]
+
+    def cantidad_prestamos_realizados(self):
+        total = len(self.prestamos)
+        print(f"Cantidad total de préstamos realizados: {total}")
+        return total
