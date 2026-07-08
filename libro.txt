@@ -1,5 +1,5 @@
 Don Quijote|Miguel de Cervantes|5|True
-1984|George Orwell|3|True
+1984|George Orwell|2|True
 El Principito|Antoine de Saint-Exupéry|10|True
 Cien Años de Soledad|Gabriel García Márquez|4|True
 El Código Da Vinci|Dan Brown|2|True
